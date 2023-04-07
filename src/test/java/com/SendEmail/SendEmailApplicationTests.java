@@ -1,8 +1,8 @@
-package com.Clientes;
+package com.SendEmail;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class 
-ClientesApplicationTests {
+class
+SendEmailApplicationTests {
 
 }
