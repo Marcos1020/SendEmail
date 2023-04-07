@@ -1,0 +1,62 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'org.springframework.experimental.aot' version '0.12.0'
+	id 'org.hibernate.orm'
+}
+
+group = 'com.testes'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	maven { url 'https://repo.spring.io/release' }
+	mavenCentral()
+}
+
+ext {
+	set('testcontainersVersion', "1.17.2")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	implementation("org.apache.kafka:kafka-streams")
+	implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.2.0'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	implementation("mysql:mysql-connector-java:8.0.19")
+	implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '7.0.4.Final'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation(group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final')
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.2'
+	implementation group: 'javax.mail', name: 'mail', version: '1.4'
+	testImplementation group: 'junit', name: 'junit', version: '4.12'
+	testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '4.5.1'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.named('bootBuildImage') {
+	builder = 'paketobuildpacks/builder:tiny'
+	environment = ['BP_NATIVE_IMAGE': 'true']
+}
+
+
